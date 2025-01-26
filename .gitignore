@@ -1,0 +1,13 @@
+# python関連
+__pycache__/
+*.pyc
+db.sqlite3
+
+# Devcontainer関連
+.devcontainer/*.log
+
+# Node関連
+node_modules/
+
+環境変数ファイル
+.env

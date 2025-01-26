@@ -1,4 +1,4 @@
-// .devcontainer/Dockerfile
+# .devcontainer/Dockerfile
 
 FROM mcr.microsoft.com/vscode/devcontainers/python:3.10
 # DevContainer用のPython3.10イメージをベースにする

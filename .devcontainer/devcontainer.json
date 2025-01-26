@@ -4,7 +4,7 @@
     "name": "TweetApp Devcontainer", //なんでもいい
 
     "build": {
-        "dockerfile": "Devcontainer",
+        "dockerfile": "Dockerfile",
         // Dockerfileのパス （ここ読んでbuildします）
         // (相対パス指定なので同じ.devcontainerフォルダ内にあるDockerfileを使う)
 
