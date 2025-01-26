@@ -1,0 +1,37 @@
+// .devcontainer/devcontainer.json
+
+{
+    "name": "TweetApp Devcontainer", //なんでもいい
+
+    "build": {
+        "dockerfile": "Devcontainer",
+        // Dockerfileのパス （ここ読んでbuildします）
+        // (相対パス指定なので同じ.devcontainerフォルダ内にあるDockerfileを使う)
+
+        "context": ".."
+        // Dockerイメージをビルドするときのコンテキスト(作業ディレクトリ)
+        // ".." を指定することで、1つ上のフォルダ(=tweetapp_ver1ルート)全体がビルド対象になる
+    },
+
+    "customizations": {
+        "vscode": {
+            // VSCode拡張機能やエディタ設定をコンテナ内で使えるようにする
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "dbaeumer.vscode-eslint",
+                "msjsdiag.vscode-react-native"
+            ]
+        }
+    },
+
+    "forwardPorts": [
+        8000,
+        3000
+    ],
+    // コンテナ内のポート 8000 (Django) と 3000 (React開発サーバー) を
+    // ホスト側にフォワードするための設定
+
+    "remoteUser": "vscode"
+    // VSCode推奨のコンテナ内ユーザー
+}
