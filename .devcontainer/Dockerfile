@@ -18,7 +18,8 @@ RUN pip install django \
     django-cors-headers \
     djangorestframework-simplejwt \
     channels \
-    channels-redis
+    channels-redis \
+    Pillow
 
 # 必要に応じてnpmでグローバルインストールするものがあればここで
 # たとえば、create-react-appとかyarnとか
