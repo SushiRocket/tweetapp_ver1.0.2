@@ -15,7 +15,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             username = validated_data["username"],
             email = validated_data.get("email", "") ,#emailは任意。メソッド呼び出し
+            password = validated_data["password"],
         )
-        user.set_password(validated_data["password"])
-        user.save()
         return user
