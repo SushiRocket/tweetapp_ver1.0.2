@@ -1,3 +1,5 @@
+# backend/tweets/views.py
+
 from rest_framework import viewsets, permissions
 from.models import Tweet
 from.serializers import TweetSerializer
