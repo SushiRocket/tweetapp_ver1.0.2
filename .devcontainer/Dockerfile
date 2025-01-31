@@ -21,27 +21,6 @@ RUN pip install django \
     channels-redis \
     Pillow
 
-# 作業ディレクトリを /app に設定
-WORKDIR /app
-
-# 環境変数の設定（環境変数をコンテナ内で永続化）
-ENV PYTHONUNBUFFERED 1
-
-# 依存関係のインストール
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# アプリケーションのコードをコンテナにコピー
-COPY . .
-
-# ポートを公開
-EXPOSE 8000
-
-# アプリケーションを起動
-CMD ["gunicorn", "backend.wsgi:application", "--bind", "0.0.0.0:8000"]
-
-
-
 # 必要に応じてnpmでグローバルインストールするものがあればここで
 # たとえば、create-react-appとかyarnとか
 # RUN npm install -g yarn
