@@ -10,4 +10,4 @@ db.sqlite3
 node_modules/
 
 環境変数ファイル
-.env
+.envbackend/.env
