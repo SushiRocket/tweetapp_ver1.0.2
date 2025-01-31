@@ -1,6 +1,6 @@
 // frontnd/src/contexts/AuthContext.jsx
 
-import { createContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import API from "../api";
 import { useNavigate } from 'react-router-dom';
 
