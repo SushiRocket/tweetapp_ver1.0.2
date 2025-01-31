@@ -16,7 +16,7 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        value: "tweetapp-ver1-0-2.onrender.com"
+        value: "tweetapp-ver1-0-2.onrender.com,tweetapp-ver1-0-2-2rdo.onrender.com"
       - key: DEBUG
         value: "False"
 databases:
