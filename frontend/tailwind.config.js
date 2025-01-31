@@ -4,6 +4,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",  // Reactの全コンポーネントをTailwindの適用対象に
     "./public/index.html", // ← これがなければ追加！
+    "./src/tailwind.css"
   ],
   safelist: [
     "bg-red-500",
