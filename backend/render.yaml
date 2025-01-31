@@ -1,12 +1,13 @@
+# backend/render.yaml
+
 services:
   - name: tweetapp-backend
     type: web
-    env: python
-    buildCommand: |
-      pip install -r requirements.txt
-      python manage.py migrate
-      python manage.py collectstatic --noinput
-    startCommand: gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT
+    env: docker
+    repo: https://github.com/SushiRocket/tweetapp_ver1.0.2
+    branch: main
+    rootDir: backend
+    dockerfilePath: backend/Dockerfile # ← Dockerfile のパスを指定
     envVars:
       - key: DATABASE_URL
         fromDatabase:
