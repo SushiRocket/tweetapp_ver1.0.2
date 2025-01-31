@@ -20,8 +20,8 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 #.envを読み込む
-dotenv_path = os.path.join(BASE_DIR, "backend/.env")
-load_dotenv()
+dotenv_path = os.path.join(BASE_DIR, ".env")
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
