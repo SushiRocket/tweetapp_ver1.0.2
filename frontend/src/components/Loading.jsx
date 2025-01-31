@@ -1,6 +1,6 @@
 // frontend/src/components/Loading.jsx
 
-import React from 'reacr';
+import React from 'react';
 
 function Loading() {
     return (
