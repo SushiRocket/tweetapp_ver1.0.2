@@ -4,7 +4,7 @@ import axios from 'axios';
 
 // APIベースURLの設定
 const API = axios.create({
-    baseURL: 'http://localhost:8000/api/',
+    baseURL: 'https://tweetapp-ver1-0-2-2rdo.onrender.com/api/',
 });
 
 // リクエストインターセプターでAuthorizationヘッダーを自動設定
@@ -22,12 +22,12 @@ API.interceptors.request.use(
 );
 
 //レスポンスインターセプターでトークンリフレッシュを自動化（オプション）
-API.interceptors.request.use(
+API.interceptors.response.use(
     (response) => response,
     async (error) => {
         const originalRequest = error.config;
         if (
-            error.request.data.status === 401 &&
+            error.response.data.status === 401 &&
             !originalRequest._retry &&
             localStorage.getItem('refresh_token')
         ) {
