@@ -1,3 +1,5 @@
+// frontend/tailwind.config.js
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   mode: "jit", // ← Just-In-Time (JIT) モードを明示的に有効化

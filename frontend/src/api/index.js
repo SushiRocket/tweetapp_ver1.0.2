@@ -3,8 +3,12 @@
 import axios from 'axios';
 
 // APIベースURLの設定
+const API_BASE_URL =
+    process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/';
+
 const API = axios.create({
-    baseURL: 'https://tweetapp-ver1-0-2-2rdo.onrender.com/api/',
+    baseURL: API_BASE_URL,
+
 });
 
 // リクエストインターセプターでAuthorizationヘッダーを自動設定
@@ -34,7 +38,7 @@ API.interceptors.response.use(
             originalRequest._retry = true;
             const refreshToken = localStorage.getItem('refresh_token');
             try {
-                const res = await axios.post('http://localhost:8000/api/token/refresh/', {refresh: refreshToken});
+                const res = await axios.post(`${API_BASE_URL}token/refresh/`, {refresh: refreshToken});
                 const newAccessToken = res.data.access;
                 localStorage.setItem('access_token', newAccessToken);
                 API.defaults.headers['Authorization'] = `Bearer ${newAccessToken}`;
