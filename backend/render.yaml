@@ -7,7 +7,7 @@ services:
     repo: https://github.com/SushiRocket/tweetapp_ver1.0.2
     branch: main
     rootDir: backend
-    dockerfilePath: Dockerfile # ← Dockerfile のパスを指定
+    dockerfilePath: Dockerfile # Dockerfile のパスを指定
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -19,7 +19,6 @@ services:
         value: "tweetapp-ver1-0-2.onrender.com,tweetapp-ver1-0-2-2rdo.onrender.com"
       - key: DEBUG
         value: "False"
-databases:
-  - name: tweetapp-db
-    ipAllowList: []
-    plan: free
+    postDeployScript: |
+      python manage.py migrate --noinput
+      python manage.py collectstatic --noinput
