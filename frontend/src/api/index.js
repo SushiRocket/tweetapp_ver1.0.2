@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // APIベースURLの設定
-const API_BASE_URL =
+export const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/';
 
 // 環境変数が正しく取得できているか確認
