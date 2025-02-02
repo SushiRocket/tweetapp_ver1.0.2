@@ -6,9 +6,11 @@ import axios from 'axios';
 const API_BASE_URL =
     process.env.REACT_APP_API_BASE_URL || 'http://localhost:8000/api/';
 
+// 環境変数が正しく取得できているか確認
+console.log("API_BASE_URL:", process.env.REACT_APP_API_BASE_URL);
+
 const API = axios.create({
     baseURL: API_BASE_URL,
-
 });
 
 // リクエストインターセプターでAuthorizationヘッダーを自動設定
