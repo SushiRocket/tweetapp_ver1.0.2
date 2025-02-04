@@ -10,12 +10,14 @@ export function AuthProvider({ children }) {
     const navigate =useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [accessToken, setAccessToken] = useState(localStorage.getItem("access_token") || null);
 
     // ログアウト関数を useCallback でラップ 
     const logout = useCallback(() => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
         setUser(null);
+        setAccessToken(null);
         navigate('/login');
     }, [navigate]);
 
@@ -49,8 +51,17 @@ export function AuthProvider({ children }) {
             const { access, refresh } = response.data;
             localStorage.setItem("access_token", access);
             localStorage.setItem("refresh_token", refresh);
+            setAccessToken(access);
             
             console.log("Login successful!", response.data);
+
+            // ユーザー取得してセット
+            const res = await API.get("profile/me/", {
+              headers: { Authorization: `Bearer ${access}`},
+            });
+            setUser(res.data);
+
+            navigate("/");
             return response.data;
           } else {
             console.error("Login failed with status", response.status);
@@ -84,7 +95,7 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+        <AuthContext.Provider value={{ user, loading, accessToken, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
