@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import API, { API_BASE_URL } from "../api";
 
 function Profile() {
-    const { user, accessToken, logout } = useContext(AuthContext);
+    const { user, logout } = useContext(AuthContext);
     const [bio, setBio] = useState(user ? user.bio : "");
     const [profileImage, setProfileImage] = useState(null);
     const [error, setError] = useState(null);
