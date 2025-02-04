@@ -5,7 +5,7 @@ from.models import Tweet
 from.serializers import TweetSerializer
 
 # Create your views here.
-class TweetViewSet(viewsets.ReadOnlyModelViewSet):
+class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by("-created_at")
     serializer_class = TweetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
