@@ -3,6 +3,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import API from "../api";
+import LikeToggle from "./LikeToggle";
 
 function TweetItem({ tweet, onDelete }) {
     const { user } =useContext(AuthContext);
@@ -40,6 +41,12 @@ function TweetItem({ tweet, onDelete }) {
                 )}
             </div>
             <p className="text-gray-800">{tweet.content}</p>
+
+            <LikeToggle
+                tweetId={tweet.id}
+                initialLiked={tweet.user_hasliked}
+                initialLikeCount={tweet.likes_count || 0}
+            />
             {error && <div className="text-red-500 mt-2">{error}</div>}
         </div>
     );

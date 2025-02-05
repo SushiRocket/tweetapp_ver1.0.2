@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "profiles",
     "tweets",
+    "likes",
 ]
 
 REST_FRAMEWORK = {
