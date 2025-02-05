@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "profiles",
     "tweets",
     "likes",
+    "comments",
 ]
 
 REST_FRAMEWORK = {
