@@ -1,10 +1,9 @@
 # backend/comments/urls.py
 
 from django.urls import path
-from rest_framework.routers import DefaultRouter
-from.views import CommentViewSet
+from.views import TweetCommentViewSet,TweetCommentDetailView
 
-router = DefaultRouter()
-router.register(r"comments", CommentViewSet, basename="comments")
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("tweets/<int:tweet_id>/comments/", TweetCommentViewSet.as_view(), name="tweet_comments_list_create"),
+    path("tweets/<int:tweet_id>/comments/<int:comment_id>/", TweetCommentDetailView.as_view(), name="tweet_comment_detail"),
+]
