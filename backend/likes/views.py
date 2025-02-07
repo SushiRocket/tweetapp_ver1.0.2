@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.response import Response
 from tweets.models import Tweet
+from notifications.models import Notification
 from.serializers import LikeSerializer
 from.models import Like
 
@@ -20,7 +21,15 @@ class LikeToggleAPIView(APIView):
 
         like, created = Like.objects.get_or_create(user=request.user, tweet=tweet)
         if created:
+
             serializer = LikeSerializer(like)
+
+            Notification.objects.create(
+                recipient = tweet.user,
+                sender = request.user,
+                message = f"{request.user.username} liked your tweet!",
+            )
+
             return Response({
                 "message": "Tweet liked successfully.",
                 "likes_count": tweet.likes.count(),
