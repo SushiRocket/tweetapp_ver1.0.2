@@ -3,6 +3,8 @@
 from rest_framework import viewsets, permissions
 from.models import Tweet
 from.serializers import TweetSerializer
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 # Create your views here.
 class TweetViewSet(viewsets.ModelViewSet):
@@ -12,4 +14,19 @@ class TweetViewSet(viewsets.ModelViewSet):
 
     def perform_create(self,serializer):
         # 新規作成時に "user" を自動的にセット
-        serializer.save(user=self.request.user)
+        tweet = serializer.save(user=self.request.user)
+
+        # 新しいツイートが投稿されたらWebsocketで通知
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.groupsend)(
+            "tweets",
+            {
+                "type": "tweet_messge",
+                "tweet": {
+                    "id": tweet.id,
+                    "content": tweet.content,
+                    "username": tweet.user.username,
+                    "created_at": str(tweet.created_at),
+                }
+            }
+        )

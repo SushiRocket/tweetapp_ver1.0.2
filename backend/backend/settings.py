@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "likes",
     "comments",
     "notifications",
+    "channels",
 ]
 
 REST_FRAMEWORK = {
@@ -114,6 +115,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 ASGI_APPLICATION = 'backend.asgi.application'
+
+REDIS_HOST = os.environ.get("REDIS_HOST")
+REDIS_PORT = os.environ.get("REDIS_PORT")
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_HOST, int(REDIS_PORT))],
+        },
+    },
+}
 
 # データベース設定（環境変数に応じて切り替
 DATABASE_URL = os.getenv("DATABASE_URL")

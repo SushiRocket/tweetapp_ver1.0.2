@@ -11,6 +11,7 @@ import TweetList from "./pages/TweetList";
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar";
 import NotificationList from "./components/NotificationList";
+import Feed from "./components/Feed";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/users/:username/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
           <Route path="/tweets" element={<PrivateRoute><TweetList /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><NotificationList /></PrivateRoute>} />
+          <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
         </Routes>
     </>
   );
