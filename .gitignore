@@ -12,3 +12,4 @@ node_modules/
 環境変数ファイル
 .env
 backend/.env
+dump.rdb
