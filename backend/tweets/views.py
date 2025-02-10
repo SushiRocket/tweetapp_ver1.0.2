@@ -18,10 +18,10 @@ class TweetViewSet(viewsets.ModelViewSet):
 
         # 新しいツイートが投稿されたらWebsocketで通知
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.groupsend)(
+        async_to_sync(channel_layer.group_send)(
             "tweets",
             {
-                "type": "tweet_messge",
+                "type": "tweet_message",
                 "tweet": {
                     "id": tweet.id,
                     "content": tweet.content,

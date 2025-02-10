@@ -1,22 +1,25 @@
 // frontend/src/Feed.jsx
 
-import React, { useState, useEffect, useContent } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import React, { useState, useEffect, useRef } from "react";
 import API from "../api";
 
 function Feed() {
-    const { accessToken } = useContent(AuthContext);
     const [tweets, setTweets] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
     // WebSocketのリファレンス
-    const wsRef = React.useRef(null);
+    const wsRef = useRef(null);
 
     useEffect(() => {
         API.get("tweets/")
-            .then((res) => setTweets(res.data))
-            .catch((err) => setError("Failed to load tweets."))
+            .then((res) =>  {
+              setTweets(res.data);
+            })
+            .catch((err) =>  {
+              console.error(err);
+              setError("Failed to load tweets.");
+            })
             .finally(() => setLoading(false));
 
         // WebSocket接続
@@ -53,6 +56,9 @@ function Feed() {
             }
           };
     }, []);
+
+    if (loading) return <p>Loading feed...</p>;
+    if (error) return <p className="text-red-500">{error}</p>;
 
     return (
         <div>
