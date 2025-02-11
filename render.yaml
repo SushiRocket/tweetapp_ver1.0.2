@@ -6,9 +6,9 @@ services:
     env: docker
     repo: https://github.com/SushiRocket/tweetapp_ver1.0.2
     branch: main
-    rootDir: backend
-    dockerfilePath: Dockerfile # Dockerfile のパスを指定
+    dockerfilePath: backend/Dockerfile # Dockerfile のパスを指定
     releaseCommand: |
+      cd backend
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
     envVars:
@@ -19,9 +19,6 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: ALLOWED_HOSTS
-        value: "tweetapp-ver1-0-2.onrender.com,tweetapp-ver1-0-2-2rdo.onrender.com"
+        value: "tweetapp-ver1-0-2.onrender.com,tweetapp-ver1-0-2-2rdo.onrender.com,tweetapp-frontend-hn90.onrender.com"
       - key: DEBUG
         value: "False"
-    postDeployScript: |
-      python manage.py migrate --noinput
-      python manage.py collectstatic --noinput
