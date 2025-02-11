@@ -71,11 +71,10 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://tweetapp-ver1-0-2.onrender.com",
-    "http://localhost:3000",
-    "http://localhost:3001",
-]
+
+cors_origins = os.getenv("CORS_ALLOWED_ORINGINS", "")
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins.split(",") if origin.strip()]
+
 
 AUTH_USER_MODEL = "users.User"
 AUTHENTICATION_BACKENDS = [
