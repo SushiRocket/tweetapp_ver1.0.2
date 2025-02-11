@@ -8,6 +8,10 @@ services:
     branch: main
     rootDir: backend
     dockerfilePath: Dockerfile # Dockerfile のパスを指定
+    postDeployScript: |
+      cd backend  
+      python manage.py migrate --noinput
+      python manage.py collectstatic --noinput
     envVars:
       - key: DATABASE_URL
         fromDatabase:
