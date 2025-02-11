@@ -8,8 +8,8 @@ services:
     branch: main
     rootDir: backend
     dockerfilePath: Dockerfile # Dockerfile のパスを指定
-    postDeployScript: |
-      cd backend  
+    releaseCommand: |
+      cd backend
       python manage.py migrate --noinput
       python manage.py collectstatic --noinput
     envVars:
