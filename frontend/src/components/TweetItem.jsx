@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import CommentList from "./CommentList";
 import LikeToggle from "./LikeToggle";
+import { Link } from "react-router-dom";
 
 const TweetItem = ({ tweet, onDelete }) => {
   const [showComments, setShowComments] = useState(false);
@@ -18,7 +19,11 @@ const TweetItem = ({ tweet, onDelete }) => {
 
   return (
     <div className="border p-4 mb-4">
-      <p className="font-bold">{tweet.username}</p>
+      <p className="font-bold">
+        <Link to={`/users/${tweet.username}/profile`} className="text-blue-500 hover:underline">
+          {tweet.username}
+        </Link>
+      </p>
       <p>{tweet.content}</p>
       <small className="text-gray-500">
         {new Date(tweet.created_at).toLocaleString()}

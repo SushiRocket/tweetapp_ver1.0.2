@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "comments",
     "notifications",
     "channels",
+    "dm",
 ]
 
 REST_FRAMEWORK = {

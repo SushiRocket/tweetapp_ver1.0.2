@@ -3,10 +3,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api";
+import { Link } from "react-router-dom";
 
 function UserProfile() {
   const { username } = useParams();
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -15,6 +16,7 @@ function UserProfile() {
       setLoading(true);
       setError("");
       const res = await API.get(`users/${username}/profile/`);
+      console.log("🚀 API Response:", res.data);
       setProfile(res.data);
       // res.dataの例: { "id": 1, "bio": "...", "profile_image": "/media/..." }
     } catch (err) {
@@ -35,11 +37,21 @@ function UserProfile() {
   if (error) return <p className="text-red-500">{error}</p>;
   if (!profile) return <p>No profile found.</p>;
 
+
+  console.log("profile:", profile);
+  console.log("profile.id:", profile.id);
+
   // ここで profile.user.username があるかどうかは
   // バックエンドのProfileSerializerによりけり
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow mt-4">
       <h2 className="text-2xl mb-4">{username}'s Profile</h2>
+      {profile?.id && (
+        <Link to={`/dm/${profile.id}`} className="text-blue-500 hover:underline mb-4 inline-block">
+          Send DM
+        </Link>
+      )}
+      
       <div className="flex flex-col items-center">
         <img
           src={profile.profile_image ? profile.profile_image : "/default_profile.png"}
