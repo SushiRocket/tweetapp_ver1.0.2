@@ -73,7 +73,8 @@ function DMPage() {
         {messages.map((msg, idx) => {
           console.log("message obj =>", msg);
           console.log(" msg.sender =>", msg.sender, "type:", typeof msg.sender);
-          console.log(" currentUserId =>", currentUserId, "type:", typeof currentUserId);          const isMyMessage = (parseInt(msg.sender) === parseInt(currentUserId));
+          console.log(" currentUserId =>", currentUserId, "type:", typeof currentUserId);
+          const isMyMessage = (String(msg.sender) === String(currentUserId));
           console.log("isMyMessage =>", isMyMessage);
           return(
             <div key={idx} className={`flex w-full mb-2 ${isMyMessage ? "justify-end" : "justify-start"}`}>
