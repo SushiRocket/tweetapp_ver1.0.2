@@ -41,6 +41,14 @@ function TweetList() {
         setTweets(tweets.filter(tweet => tweet.id !== deletedTweetId))
     };
 
+    const handleBookmarkToggle = (tweetId) => {
+        setTweets((prevTweets) =>
+            prevTweets.map((tweet) =>
+                tweet.id === tweetId ? { ...tweet, isBookmarked: !tweet.isBookmarked } : tweet
+            )
+        );
+    };
+
     return (
         <div className="container mx-auto mt-4 px-4">
             <h2 className="text-2xl font-bold mb-4">Tweets</h2>
@@ -58,7 +66,7 @@ function TweetList() {
 
             <div className="space-y-4">
                 {tweets.map((tweet) => (
-                    <TweetItem key={tweet.id} tweet={tweet} onDelete={handleDeleteTweet}/>
+                    <TweetItem key={tweet.id} tweet={tweet} onDelete={handleDeleteTweet} onBookmarkToggle={() => handleBookmarkToggle(tweet.id)} />
                 ))}
             </div>
         </div>

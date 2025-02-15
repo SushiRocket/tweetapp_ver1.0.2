@@ -5,8 +5,9 @@ import React, { useState } from "react";
 import CommentList from "./CommentList";
 import LikeToggle from "./LikeToggle";
 import { Link } from "react-router-dom";
+import BookmarkToggle from "./BookmarkToggle";
 
-const TweetItem = ({ tweet, onDelete }) => {
+const TweetItem = ({ tweet, onDelete, onBookmarkToggle }) => {
   const [showComments, setShowComments] = useState(false);
 
   const handleDeleteTweet = () => {
@@ -34,6 +35,12 @@ const TweetItem = ({ tweet, onDelete }) => {
             tweetId={tweet.id}
             initialLiked={tweet.user_has_liked}
             initialLikeCount={tweet.likes_count}
+        />
+
+        <BookmarkToggle
+          tweetId={tweet.id}
+          isBookmarked={tweet.isBookmarked}
+          onToggle={onBookmarkToggle}
         />
 
         <button

@@ -13,6 +13,7 @@ import Navbar from "./components/Navbar";
 import NotificationList from "./components/NotificationList";
 import Feed from "./components/Feed";
 import DMPage from "./components/DM";
+import Bookmarks from "./pages/Bookmarks";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/tweets" element={<PrivateRoute><TweetList /></PrivateRoute>} />
           <Route path="/notifications" element={<PrivateRoute><NotificationList /></PrivateRoute>} />
           <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
+          <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
           <Route path="/dm/:userId" element={<PrivateRoute><DMPage /></PrivateRoute>} />
         </Routes>
     </>
