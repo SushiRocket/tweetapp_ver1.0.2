@@ -4,12 +4,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import API from "../api";
 import { Link } from "react-router-dom";
+import FollowButton from "../components/FollowButton";
 
 function UserProfile() {
   const { username } = useParams();
   const [profile, setProfile] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   const fetchUserProfile = useCallback(async () => {
     try {
@@ -18,6 +20,7 @@ function UserProfile() {
       const res = await API.get(`users/${username}/profile/`);
       console.log("🚀 API Response:", res.data);
       setProfile(res.data);
+      setIsFollowing(res.data.is_following);
       // res.dataの例: { "id": 1, "bio": "...", "profile_image": "/media/..." }
     } catch (err) {
       console.error("Failed to load user profile:", err);
@@ -32,10 +35,14 @@ function UserProfile() {
     fetchUserProfile();
   }, [username, fetchUserProfile]);
 
+  const handleFollowToggle = () => {
+    setIsFollowing(!isFollowing);
+  };
+
 
   if (loading) return <p>Loading user profile...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!profile) return <p>No profile found.</p>;
+  if (!profile || !profile.id) return <p>No profile found.</p>;
 
 
   console.log("profile:", profile);
@@ -59,8 +66,15 @@ function UserProfile() {
           className="w-24 h-24 rounded-full object-cover mb-2"
         />
         <p className="text-gray-700">{profile.bio}</p>
+
+        {profile.id && (
+          <FollowButton
+            userId={profile.id}
+            isFollowing={isFollowing}
+            onToggle={handleFollowToggle}
+          />
+        )}
       </div>
-      {/* 他にユーザー名やフォロー情報を表示したければ追加 */}
     </div>
   );
 }

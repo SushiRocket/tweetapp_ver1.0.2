@@ -1,7 +1,10 @@
 # backend/users/serializers.py
 
 from rest_framework import serializers
-from.models import User
+from django.contrib.auth import get_user_model
+from.models import Follow
+
+User = get_user_model()
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -18,3 +21,16 @@ class UserCreateSerializer(serializers.ModelSerializer):
             password = validated_data["password"],
         )
         return user
+    
+class UserProfileSerializer(serializers.ModelSerializer):
+    is_following = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "is_following"]
+
+    def get_is_following(self, obj):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            return Follow.objects.filter(follower=request.user, following=obj).exists()
+        return False
