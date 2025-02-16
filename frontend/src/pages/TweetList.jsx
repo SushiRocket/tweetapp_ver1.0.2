@@ -41,10 +41,10 @@ function TweetList() {
         setTweets(tweets.filter(tweet => tweet.id !== deletedTweetId))
     };
 
-    const handleBookmarkToggle = (tweetId) => {
+    const handleBookmarkToggle = (tweetId, newStatus) => {
         setTweets((prevTweets) =>
             prevTweets.map((tweet) =>
-                tweet.id === tweetId ? { ...tweet, isBookmarked: !tweet.isBookmarked } : tweet
+                tweet.id === tweetId ? { ...tweet, isBookmarked: newStatus } : tweet
             )
         );
     };
@@ -66,7 +66,7 @@ function TweetList() {
 
             <div className="space-y-4">
                 {tweets.map((tweet) => (
-                    <TweetItem key={tweet.id} tweet={tweet} onDelete={handleDeleteTweet} onBookmarkToggle={() => handleBookmarkToggle(tweet.id)} />
+                    <TweetItem key={tweet.id} tweet={tweet} onDelete={handleDeleteTweet} onBookmarkToggle={handleBookmarkToggle} />
                 ))}
             </div>
         </div>

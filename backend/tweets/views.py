@@ -1,6 +1,7 @@
 # backend/tweets/views.py
 
 from rest_framework import viewsets, permissions, status
+from rest_framework.views import APIView
 from.models import Tweet, Bookmark
 from.serializers import TweetSerializer
 from channels.layers import get_channel_layer
@@ -10,31 +11,44 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def bookmark_tweet(request, tweet_id):
-    user = request.user
-    try:
-        tweet = Tweet.objects.get(id=tweet_id)
-    except Tweet.DoesNotExist:
-        return Response({"Error": "Tweet not found"}, status=status.HTTP_404_NOT_FOUND)
+class BookmarkAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, tweet_id):
+        user = request.user
+        try:
+            tweet = Tweet.objects.get(id=tweet_id)
+        except Tweet.DoesNotExist:
+            return Response({"Error": "Tweet not Found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        bookmark, created = Bookmark.objects.get_or_create(user=user, tweet=tweet)
+
+        if not created:
+            bookmark.delete()
+            return Response({"Message": "Bookmark removed."}, status=status.HTTP_200_OK)
+        return Response({"Message": "Tweet bookmarked."}, status=status.HTTP_201_CREATED)
     
-    bookmark, created = Bookmark.objects.get_or_create(user=user, tweet=tweet)
-
-    if not created:
-        bookmark.delete()
-        return Response({"message": "Bookmark removed"}, status=status.HTTP_200_OK)
+    def get(self, request):
+        user = request.user
+        bookmarks = Bookmark.objects.filter(user=user).select_related("tweet")
+        bookmarked_tweets = [
+            {
+                "id": b.tweet.id,
+                "content": b.tweet.content,
+                "created_at": b.tweet.created_at
+            }
+            for b in bookmarks
+        ]
+        return Response(bookmarked_tweets, status=status.HTTP_200_OK)
     
-    return Response({"message": "Tweet bookmarked"}, status=status.HTTP_201_CREATED)
-
-@api_view(["GET"])
-@permission_classes([IsAuthenticated])
-def list_bookmarks(request):
-    user = request.user
-    bookmarks = Bookmark.objects.filter(user=user).select_related("tweet")
-    bookmarked_tweets = [{"id": b.tweet.id, "content": b.tweet.content, "created_at": b.tweet.created_at} for b in bookmarks]
-
-    return Response(bookmarked_tweets, status=status.HTTP_200_OK)
+    def delete(self, request, tweet_id):
+        user = request.user
+        try:
+            bookmark = Bookmark.objects.get(user=user, tweet_id=tweet_id)
+            bookmark.delete()
+            return Response({"Message": "Bookmark removed."}, status=status.HTTP_200_OK)
+        except Bookmark.DoesNotExist:
+            return Response({"Error": "Bookmark not found."}, status=status.HTTP_404_NOT_FOUND)
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = Tweet.objects.all().order_by("-created_at")

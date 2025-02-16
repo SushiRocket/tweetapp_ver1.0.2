@@ -1,30 +1,50 @@
 // frontend/src/components/BookmarkToggle.jsx
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import API from "../api";
 
-const  BookmarkToggle = ({ tweetId, isBookmarked, onToggle }) => {
-    const [bookmarked, setBookmarked] = useState(isBookmarked);
+const  BookmarkToggle = ({ tweetId, initialBookmarked, onToggle }) => {
+    const [bookmarked, setBookmarked] = useState(initialBookmarked);
 
     useEffect(() => {
-        setBookmarked(isBookmarked);
-    }, [isBookmarked]);
+        setBookmarked(initialBookmarked);
+    }, [initialBookmarked]);
 
     const handleBookmark = async () => {
         try {
-            const response = await post(`tweets/${tweetId}/bookmark/`)
-            console.log("Successful Bookmarked.", response.data)
+            const response = await API.post(`tweets/${tweetId}/bookmark/`);
+            console.log("Bookmark Response:", response.data)
             setBookmarked(true);
-
-            if (onToggle) onToggle();
+            onToggle(true);
         } catch (error) {
             console.error("Error:", error);
         }
     };
 
+    const handleUnBookmark = async () => {
+        try {
+            const response = await API.delete(`tweets/${tweetId}/unbookmark/`);
+            console.log("UnBookmark Response:", response.data);
+            setBookmarked(false);
+            onToggle(false);
+        } catch (error) {
+            console.error("Error unbookmark", error);
+        }
+    };
+
     return (
-        <button onClick={handleBookmark} className="bookmark-button">
-            {bookmarked ? "Bookmark" : "UnBookmark"}
-        </button>
+        <div>
+            {bookmarked ? (
+                <button onClick={handleUnBookmark} className="text-red-500">
+                    UnBookmark
+                </button>
+            ) : (
+                <button onClick={handleBookmark} className="text-blue-500">
+                    Bookmark
+                </button>
+            )}
+        </div>
+
     );
 };
 

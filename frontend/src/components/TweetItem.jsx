@@ -39,8 +39,8 @@ const TweetItem = ({ tweet, onDelete, onBookmarkToggle }) => {
 
         <BookmarkToggle
           tweetId={tweet.id}
-          isBookmarked={tweet.isBookmarked}
-          onToggle={onBookmarkToggle}
+          initialBookmarked={tweet.isBookmarked}
+          onToggle={(newStatus) => onBookmarkToggle(tweet.id, newStatus)}
         />
 
         <button
