@@ -14,6 +14,8 @@ import NotificationList from "./components/NotificationList";
 import Feed from "./components/Feed";
 import DMPage from "./components/DM";
 import Bookmarks from "./pages/Bookmarks";
+import FollowersList from "./pages/FollowersList";
+import FollowingList from "./pages/FollowingList";
 
 function App() {
   return (
@@ -30,6 +32,9 @@ function App() {
           <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
           <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
           <Route path="/dm/:userId" element={<PrivateRoute><DMPage /></PrivateRoute>} />
+          <Route path="/user/:userId/followers" element={<PrivateRoute><FollowersList /></PrivateRoute>} />
+          <Route path="/user/:userId/following" element={<PrivateRoute><FollowingList /></PrivateRoute>} />
+
         </Routes>
     </>
   );
