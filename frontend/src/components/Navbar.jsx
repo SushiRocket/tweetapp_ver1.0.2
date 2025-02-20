@@ -16,7 +16,7 @@ function Navbar() {
             <div>
                 { user ? (
                     <>
-                        <Link to={`/users/${user.username}/profile`} className='mr-4'>{user.username}</Link>
+                        <Link to="/profile/me" className='mr-4'>{user.username}</Link>
                         <Link to="/feed" className='mr-4'>Feed</Link>
                         <Link to="/notifications" className='mr-4'>Notifications</Link>
                         <button onClick={logout} className='bg-red-500 px-3 py-1 rounded'>Logout</button>

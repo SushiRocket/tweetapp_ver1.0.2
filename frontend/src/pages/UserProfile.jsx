@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
-import API from "../api";
 import { Link } from "react-router-dom";
 import FollowButton from "../components/FollowButton";
+import API, { REACT_APP_HOST_URL} from "../api";
 
 function UserProfile() {
   const { username } = useParams();
@@ -48,6 +48,16 @@ function UserProfile() {
   console.log("profile:", profile);
   console.log("profile.id:", profile.id);
 
+  const imageUrl = profile?.profile_image
+    ? profile.profile_image.startsWith("http")
+      ? profile.profile_image
+      : `${REACT_APP_HOST_URL}${profile.profile_image}`
+    : `${REACT_APP_HOST_URL}static/images/default_profile.png`;
+
+  // キャッシュバスター（例: 現在のタイムスタンプ）を付与
+  const finalImageUrl = `${imageUrl}?v=${new Date().getTime()}`;
+  
+
   // ここで profile.user.username があるかどうかは
   // バックエンドのProfileSerializerによりけり
   return (
@@ -61,7 +71,7 @@ function UserProfile() {
       
       <div className="flex flex-col items-center">
         <img
-          src={profile.profile_image ? profile.profile_image : "/default_profile.png"}
+          src={finalImageUrl}
           alt="Profile"
           className="w-24 h-24 rounded-full object-cover mb-2"
         />

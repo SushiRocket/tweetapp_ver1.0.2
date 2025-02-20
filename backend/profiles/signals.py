@@ -43,11 +43,7 @@ def delete_old_profile_image(sender, instance, **kwargs):
     # もし古いファイルが存在して、かつ新しいファイルと違い、
     # なおかつ old_image がデフォルト画像でなければ削除する
 
-    if (
-        old_image
-        and old_image != new_image
-        and old_image.name != "default_profile.png"
-    ) :
+    if old_image and old_image != new_image:
         old_path = os.path.join(settings.MEDIA_ROOT, old_image.name)
         if os.path.exists(old_path):
             os.remove(old_path)

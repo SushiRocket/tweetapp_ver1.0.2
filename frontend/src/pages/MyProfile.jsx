@@ -1,8 +1,8 @@
-// frontend/src/pages/Profile.jsx
+// frontend/src/pages/MyProfile.jsx
 
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import API from "../api";
+import API, {  REACT_APP_HOST_URL,  } from "../api";
 
 function Profile() {
   const { user } = useContext(AuthContext); // ログインユーザー情報
@@ -67,6 +67,16 @@ function Profile() {
   if (loading) return <p>Loading profile...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
+  const imageUrl = user?.profile_image
+    ? user.profile_image.startsWith("http")
+      ? user.profile_image
+      : `${REACT_APP_HOST_URL}${user.profile_image}`
+    : `${REACT_APP_HOST_URL}static/images/default_profile.png`;
+
+  // キャッシュバスター（例: 現在のタイムスタンプ）を付与
+  const finalImageUrl = `${imageUrl}?v=${new Date().getTime()}`;
+
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
@@ -78,7 +88,7 @@ function Profile() {
         {/* もしAuthContextの user にも profile_image があれば表示してもOK */}
         <div className="mb-4 flex flex-col items-center">
           <img
-            src={user?.profile_image ? user.profile_image : "/default_profile.png"}
+            src={finalImageUrl}
             alt="Profile"
             className="w-24 h-24 rounded-full object-cover mb-2"
           />
