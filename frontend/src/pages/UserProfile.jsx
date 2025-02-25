@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import FollowButton from "../components/FollowButton";
 import API, { REACT_APP_HOST_URL} from "../api";
+import FollowersList from "./FollowersList";
+import FollowingList from "./FollowingList";
 
 function UserProfile() {
   const { username } = useParams();
@@ -12,6 +14,7 @@ function UserProfile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile");
 
   const fetchUserProfile = useCallback(async () => {
     try {
@@ -63,6 +66,17 @@ function UserProfile() {
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow mt-4">
       <h2 className="text-2xl mb-4">{username}'s Profile</h2>
+
+      {/* ProfileタブかFollowersタブかFollowingタブを切り替えるボタンを配置 */}
+      <div className="flex space-x-4 mb-4">
+        <button>
+
+        </button>
+      </div>
+
+
+
+
       {profile?.id && (
         <Link to={`/dm/${profile.id}`} className="text-blue-500 hover:underline mb-4 inline-block">
           Send DM
