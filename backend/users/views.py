@@ -21,10 +21,10 @@ class FollowAPIView(APIView):
 
     permission_classes = [IsAuthenticated]
 
-    def post(self, request, user_id):
+    def post(self, request, username):
         follower = request.user
         try:
-            following = User.objects.get(id=user_id)
+            following = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -37,10 +37,10 @@ class FollowAPIView(APIView):
             return Response({"message": "Followed"}, status=status.HTTP_201_CREATED)
         return Response({"message": "Already following"}, status=status.HTTP_200_OK)
 
-    def delete(self, request, user_id):
+    def delete(self, request, username):
         follower = request.user
         try:
-            follow_relation = Follow.objects.get(follower=follower, following_id=user_id)
+            follow_relation = Follow.objects.get(follower=follower, following__username=username)
             follow_relation.delete()
             return Response({"message": "Unfollowed"}, status=status.HTTP_200_OK)
         except Follow.DoesNotExist:
@@ -49,9 +49,9 @@ class FollowAPIView(APIView):
 class FollowersListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, user_id):
+    def get(self, request, username):
         try:
-            user = User.objects.get(id=user_id)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({"Error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         
@@ -63,9 +63,9 @@ class FollowersListView(APIView):
 class FollowingListView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, user_id):
+    def get(self, request, username):
         try:
-            user = User.objects.get(id=user_id)
+            user = User.objects.get(username=username)
         except User.DoesNotExist:
             return Response({"Error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
         

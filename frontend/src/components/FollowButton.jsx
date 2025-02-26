@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import API from "../api";
 
-const FollowButton = ({userId, isFollowing, onToggle }) => {
+const FollowButton = ({username, isFollowing, onToggle }) => {
     const [following, setFollowing] = useState(isFollowing);
 
     useEffect(() => {
@@ -12,7 +12,7 @@ const FollowButton = ({userId, isFollowing, onToggle }) => {
 
     const handleFollow = async () => {
         try {
-            const response = await API.post(`users/${userId}/follow/`);
+            const response = await API.post(`users/${username}/follow/`);
             console.log("Follow Response:", response.data)
             setFollowing(true);
             onToggle(true);
@@ -23,7 +23,7 @@ const FollowButton = ({userId, isFollowing, onToggle }) => {
 
     const handleUnFollow = async () => {
         try {
-            const response = await API.delete(`users/${userId}/unfollow/`);
+            const response = await API.delete(`users/${username}/unfollow/`);
             console.log("UnFollow Response:", response.data);
             setFollowing(false);
             onToggle(false);
