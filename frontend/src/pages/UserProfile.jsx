@@ -69,36 +69,66 @@ function UserProfile() {
 
       {/* ProfileタブかFollowersタブかFollowingタブを切り替えるボタンを配置 */}
       <div className="flex space-x-4 mb-4">
-        <button>
-
+        <button
+          onClick={() => setActiveTab("profile")}
+          className={`px-3 py-1 rounded
+            ${activeTab === "profile" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+        >
+          Profile
+        </button>
+        <button
+          onClick={() => setActiveTab("followers")}
+          className={`px-3 py-1 rounded
+            ${activeTab === "followers" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+        >
+          Followers
+        </button>
+        <button
+          onClick={() => setActiveTab("following")}
+          className={`px-3 py-1 rounded
+            ${activeTab === "following" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"}`}
+          >
+          Following
         </button>
       </div>
 
-
-
-
-      {profile?.id && (
-        <Link to={`/dm/${profile.id}`} className="text-blue-500 hover:underline mb-4 inline-block">
-          Send DM
-        </Link>
-      )}
-      
-      <div className="flex flex-col items-center">
-        <img
-          src={finalImageUrl}
-          alt="Profile"
-          className="w-24 h-24 rounded-full object-cover mb-2"
-        />
-        <p className="text-gray-700">{profile.bio}</p>
-
-        {profile.id && (
-          <FollowButton
-            userId={profile.id}
-            isFollowing={isFollowing}
-            onToggle={handleFollowToggle}
+      {/* タブごとの表示内容を切り替え */}
+      {activeTab === "profile" && (
+        <div className="flex flex-col items-center">
+          <img 
+            src={finalImageUrl}
+            alt="Profile"
+            className="w-24 h-24 rounded-full object-cover mb-2"
           />
+        <p className="text-gray-700">{profile.bio}</p>
+        
+        {profile?.id && (
+          <div>
+            <Link to={`/dm/${profile.username}`} className="text-blue-500 hover:underline mb-4 inline-block">
+              Send DM
+            </Link>
+            <FollowButton
+              userId={profile.id}
+              username={profile.username}
+              isFollowing={isFollowing}
+              onToggle={handleFollowToggle}
+            />
+          </div>      
         )}
-      </div>
+        </div>
+      )}
+
+      {activeTab === "followers" && (
+        <div>
+          <FollowersList userId={profile.id} />
+        </div>
+      )}
+
+      {activeTab === "following" && (
+        <div>
+          <FollowingList userId={profile.id} />
+        </div>
+      )}
     </div>
   );
 }
