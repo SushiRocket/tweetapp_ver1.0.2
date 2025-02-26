@@ -1,8 +1,8 @@
 # backend/dm/routing.py
 
-from django.urls import re_path
+from django.urls import path
 from .consumers import DMConsumer
 
 websocket_urlpatterns = [
-    re_path(r'ws/dm/(?P<user_id>\d+)/$', DMConsumer.as_asgi()),
+    path("ws/dm/<str:username>/", DMConsumer.as_asgi()),
 ]

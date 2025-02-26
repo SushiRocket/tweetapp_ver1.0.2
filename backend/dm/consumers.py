@@ -15,9 +15,9 @@ class DMConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         # URLのパラメータとして user_id が来る想定
-        self.other_user_id = self.scope['url_route']['kwargs']['user_id']
+        self.other_username = self.scope['url_route']['kwargs']['username']
         self.user = self.scope['user']  # ログイン中のユーザー
-        print("DMConsumer connect:", self.user.username, "-> user_id=", self.other_user_id)
+        print(f"DMConsumer connect: {self.user.username} -> username= {self.other_username}")
 
         if self.user.is_anonymous:
             # 未ログインなら接続拒否
@@ -25,13 +25,20 @@ class DMConsumer(AsyncWebsocketConsumer):
             await self.close()
             return
         
-        else:
-            # 2ユーザーのIDをソートして "dm_<小さいID>_<大きいID>" のチャットルーム名を作る
-            sorted_ids = sorted([self.user.id, int(self.other_user_id)])
-            self.room_name = f"dm_{sorted_ids[0]}_{sorted_ids[1]}"
-            # グループに参加
-            await self.channel_layer.group_add(self.room_name, self.channel_name)
-            await self.accept()
+        try:
+            recipient = await sync_to_async(User.objects.get)(username=self.other_username)
+            self.other_user_id = recipient.id
+            print(f"✅ Recipient found: {recipient.username} (ID: {recipient.id})")
+        except User.DoesNotExist:
+            print(f"❌ Error: Recipient with username {self.other_username} does not exist.")
+            await self.close()
+            return
+
+        self.room_name = f"dm_{min(self.user.id, self.other_user_id)}_{max(self.user.id, self.other_user_id)}"
+        print(f"✅ Room name: {self.room_name}")
+    
+        await self.channel_layer.group_add(self.room_name, self.channel_name)
+        await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_name, self.channel_name)
@@ -43,6 +50,11 @@ class DMConsumer(AsyncWebsocketConsumer):
             message_content = data.get('content')
             # DBに保存
             dm_obj = await self.save_dm(message_content)
+
+            if dm_obj is None:
+                print("❌ Message was not saved due to an error.")
+                return 
+
 
             # 他方にもブロードキャスト
             await self.channel_layer.group_send(
@@ -67,8 +79,15 @@ class DMConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def save_dm(self, content):
+        try:
+            recipient = User.objects.get(id=int(self.other_user_id))
+            print(f"✅ Saving message: sender={self.user.id}, recipient={recipient.id}")
+        except User.DoesNotExist:
+            print(f"Error: recipient user {self.other_user_id} does not exist")
+            return None
+
         return DirectMessage.objects.create(
-            sender_id=self.user.id,
-            recipient_id=self.other_user_id,
+            sender=self.user,
+            recipient=recipient,
             content=content
         )

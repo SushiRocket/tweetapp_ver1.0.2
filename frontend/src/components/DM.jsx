@@ -7,7 +7,7 @@ import { connectDMWebSocket } from "../api/dm";
 import { AuthContext } from "../contexts/AuthContext";
 
 function DMPage() {
-  const { userId } = useParams(); // URLパラメータの相手ユーザーID
+  const { username } = useParams(); // URLパラメータの相手ユーザーID
   const { user } = useContext(AuthContext);
   const currentUserId = user ? user.id : null;
   const [messages, setMessages] = useState([]);
@@ -16,13 +16,14 @@ function DMPage() {
 
   // useCallback を使ってfetchDMHistoryをメモ化
   const fetchDMHistory = useCallback(async () => {
+    if(!username) return;
     try {
-      const res = await API.get(`dm/?user=${userId}`);
+      const res = await API.get(`dm/?username=${username}`);
       setMessages(res.data);
     } catch (err) {
       console.error("Failed to fetch DM history:", err);
     }
-  }, [userId]);  // `userId` を依存関係に追加
+  }, [username]);  // `userId` を依存関係に追加
 
   // fetchDMHistoryをuseEffectの依存配列に追加
   useEffect(() => {
@@ -31,7 +32,7 @@ function DMPage() {
 
   // 2) WebSocket接続
   useEffect(() => {
-    const socket = connectDMWebSocket(userId);  // WebSocket接続関数を使用
+    const socket = connectDMWebSocket(username);  // WebSocket接続関数を使用
     socketRef.current = socket;
 
     socket.onopen = () => {
@@ -56,7 +57,7 @@ function DMPage() {
         socketRef.current.close();
       }
     };
-  }, [userId]);
+  }, [username]);
 
   // 3) メッセージ送信
   const sendMessage = () => {
@@ -67,7 +68,7 @@ function DMPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">DM with User {userId}</h2>
+      <h2 className="text-xl font-bold mb-4">DM with User {username}</h2>
 
       <div className="border p-4 mb-4 "style={{ height: '300px', overflowY: 'auto' }}>
         {messages.map((msg, idx) => {

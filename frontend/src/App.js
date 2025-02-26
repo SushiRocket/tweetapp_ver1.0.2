@@ -31,7 +31,7 @@ function App() {
           <Route path="/notifications" element={<PrivateRoute><NotificationList /></PrivateRoute>} />
           <Route path="/feed" element={<PrivateRoute><Feed /></PrivateRoute>} />
           <Route path="/bookmarks" element={<PrivateRoute><Bookmarks /></PrivateRoute>} />
-          <Route path="/dm/:userId" element={<PrivateRoute><DMPage /></PrivateRoute>} />
+          <Route path="/dm/:username" element={<PrivateRoute><DMPage /></PrivateRoute>} />
           <Route path="/user/:userId/followers" element={<PrivateRoute><FollowersList /></PrivateRoute>} />
           <Route path="/user/:userId/following" element={<PrivateRoute><FollowingList /></PrivateRoute>} />
 
